@@ -4,6 +4,10 @@ const { SuccessResponse, ErrorResponse } = require("../utils/common");
 
 const userService=new UserService();
 
+/**
+ * POST : /signup/
+ *  req.body : { email: xyz, password: abc }
+ */
 async function createUser(req,res) {
     try {
         const response = await userService.createUser({
