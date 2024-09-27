@@ -43,6 +43,27 @@ class UserService {
         }
     }
 
+    async authenticateUser(token) {
+        try {
+            if(!token) {
+                throw new AppError("Missing JWT token",StatusCodes.BAD_REQUEST);
+            }
+            const user=await Auth.verifyToken(token);
+            console.log(user);
+            const userId=await this.#userRepository.get(user.id);
+            if(!userId) {
+                throw new AppError("User not Found",StatusCodes.NOT_FOUND);
+            }
+            return user.id;
+        } catch (error) {
+            if(error instanceof AppError) throw error;
+            if(error.name=='JsonWebTokenError') {
+                throw new AppError("Invalid JWT",StatusCodes.BAD_REQUEST);
+            }
+            console.log(error);
+            throw error;
+        }
+    }
 }
 
 module.exports=UserService;

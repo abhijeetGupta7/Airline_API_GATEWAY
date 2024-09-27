@@ -21,7 +21,18 @@ async function createToken(input) {
     }
 }
 
+async function verifyToken(token) {
+    try {
+        const decodedToken=jwt.verify(token,JWT_SECRET);  // here verify is also sync, although, the function we made is async, in future, we just have to change the sign and verify method to their async versions only
+        return decodedToken;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports={
     checkPassword,
-    createToken
+    createToken,
+    verifyToken
 }

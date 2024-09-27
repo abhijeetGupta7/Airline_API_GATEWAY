@@ -25,6 +25,10 @@ async function createUser(req,res) {
     }
 }
 
+/**
+ * POST : /signin/
+ *  req.body : { email: xyz, password: abc }
+ */
 async function signIn(req,res) {
     try {
         const response=await userService.signIn({
