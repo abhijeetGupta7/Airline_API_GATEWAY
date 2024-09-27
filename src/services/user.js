@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { UserRepository } = require("../repositories");
-const { SuccessResponse }=require("../utils/common/");
 const AppError = require("../utils/errors/app-error");
+const { Auth } = require("../utils/common/");
 
 class UserService {
     #userRepository;
@@ -26,6 +26,23 @@ class UserService {
             throw error;
         }
     }
+
+    async signIn(data) {
+        try {
+            const user=await this.#userRepository.getUserByEmail(data.email);
+            if(!user) {
+                throw new AppError("User does not exist",StatusCodes.NOT_FOUND);
+            }
+            const isMatch=await Auth.checkPassword(data.password,user.password);
+            if(!isMatch) throw new AppError("Username and Password does not match",StatusCodes.BAD_REQUEST);
+            
+            const jwt=Auth.createToken({id: user.id, email: user.email});
+            return jwt;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 module.exports=UserService;
