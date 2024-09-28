@@ -1,8 +1,10 @@
 const express=require('express');
 const bodyParser = require('body-parser');
-const { PORT } = require('./config/server-config');
+const { PORT, FLIGHT_SERVICE_URL, BOOKING_SERVICE_URL } = require('./config/server-config');
 const apiRouter = require('./routes');
 const { rateLimit } = require('express-rate-limit');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 const app=express();
 
 app.use(bodyParser.text());
@@ -16,6 +18,9 @@ const limiter = rateLimit({
 
 // Apply the rate limiting middleware to all requests.
 app.use(limiter);
+
+app.use("/flightService", createProxyMiddleware({ target: FLIGHT_SERVICE_URL, changeOrigin: true, pathRewrite: { '^/flightService': '' } })); // remove /flightService from the request URL , otherwise the finalTarget URL will be http:/localhost:8000/flightService, so in the flightService also we have to handle the /flightService route part by using the app.use("/flightService/api")  
+app.use("/bookingService",createProxyMiddleware({ target: BOOKING_SERVICE_URL, changeOrigin: true, pathRewrite: { '^/bookingService': '' } })); // remove /flightService from the request URL 
 
 app.use("/api",apiRouter);
 
