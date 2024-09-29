@@ -15,7 +15,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsToMany(models.Role, { through: models.User_Role });
+      User.belongsToMany(models.Role, { 
+        through: models.User_Role,
+        foreignKey: 'user_id',
+        otherKey: 'role_id' 
+      },
+      );
     }
   }
   User.init({
