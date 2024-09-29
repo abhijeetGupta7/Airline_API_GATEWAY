@@ -5,5 +5,6 @@ const userRouter=express.Router();
 
 userRouter.post("/signup",authUserMiddlewares.validateAuthRequest,userController.createUser);
 userRouter.post("/signin",authUserMiddlewares.validateAuthRequest,userController.signIn);
+userRouter.post("/role",authUserMiddlewares.authenticateUser, authUserMiddlewares.isAdmin, userController.addRoleToUser);
 
 module.exports=userRouter;

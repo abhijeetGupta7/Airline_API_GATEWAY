@@ -19,7 +19,7 @@ function validateAuthRequest(req,res,next) {
     next();
 }
 
-async function authenticateUser(req,res,next) {
+async function authenticateUser(req,res,next) {   // authorization 
     try {
         const bearerHeader=req.headers['x-access-token'];   // it's practice that token is prepended by "Bearer" string
         const bearer=bearerHeader.split(' '); 
@@ -29,7 +29,24 @@ async function authenticateUser(req,res,next) {
         req.userId=userId;      // setting the userId in the req object as user
         next();
     } catch (error) {
+        console.log(error);
         ErrorResponse.message="Something went wrong while authentication";
+        ErrorResponse.error=error;
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    }
+}
+
+async function isAdmin(req,res,next) {
+    try {
+        const isAdmin=await userService.isAdmin(req.userId);  // after the successful authorization by the above function, we attach the userId in the request body
+        console.log(isAdmin);
+        console.log(req.userId);
+        
+        if(isAdmin) {
+            next();
+        }   
+    } catch (error) {
+        ErrorResponse.message="Something went wrong while authorization";
         ErrorResponse.error=error;
         return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
     }
@@ -38,5 +55,6 @@ async function authenticateUser(req,res,next) {
 
 module.exports={
     validateAuthRequest,
-    authenticateUser
+    authenticateUser,
+    isAdmin
 }

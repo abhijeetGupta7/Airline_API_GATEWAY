@@ -15,7 +15,6 @@ class RoleRepository extends CrudRepository {
         });
         return role;
     }
-
 }
 
 module.exports=RoleRepository;

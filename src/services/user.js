@@ -16,8 +16,8 @@ class UserService {
     async createUser(data) {
         try {
             const user=await this.#userRepository.create(data);
-            const role=await this.#roleRepository.getRoleByName(Enums.USER_ROLES.CUSTOMER);
-            user.addRole(role);
+            const role=await this.#roleRepository.getRoleByName(Enums.USER_ROLES.CUSTOMER);  
+            await user.addRole(role);   // role is the role instance that has to be given
             return user;
         } catch (error) {
             console.log(error);
@@ -70,6 +70,44 @@ class UserService {
                 throw new AppError("JWT token expired",StatusCodes.BAD_REQUEST);
             }
             console.log(error);
+            throw error;
+        }
+    }
+
+    async addRoleToUser(data) {
+        try {
+            const user=await this.#userRepository.get(data.id);             
+            if(!user) {
+                throw new AppError("User does not exist for given id",StatusCodes.NOT_FOUND);
+            }
+            const role=await this.#roleRepository.getRoleByName(data.role);
+            if(!role) {
+                throw new AppError("Given Role does not exist",StatusCodes.NOT_FOUND);
+            }
+            user.addRole(role);
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    async isAdmin(id) {
+        try {
+            const user=await this.#userRepository.get(id);            
+            if(!user) {
+                throw new AppError("User does not exist for given id",StatusCodes.NOT_FOUND);
+            }
+            const adminRole= await this.#roleRepository.getRoleByName(Enums.USER_ROLES.ADMIN);
+            if(!adminRole) {
+                throw new AppError("Admin Role does not exist",StatusCodes.NOT_FOUND);
+            }
+            const hasAdminRole=await user.hasRole(adminRole);
+            if(!hasAdminRole) {
+                throw new AppError("User not authorized for adding Role",StatusCodes.UNAUTHORIZED);
+            }
+            return true;
+        } catch (error) {
             throw error;
         }
     }
