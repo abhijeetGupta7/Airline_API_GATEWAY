@@ -12,7 +12,14 @@ const BOOKING_STATUS = {
     PENDING: "pending"
 }
 
+const USER_ROLES = {
+    CUSTOMER: "customer",
+    ADMIN: "admin",
+    FLIGHT_COMPANY: "flight_company"
+}
+
 module.exports= {
     SEAT_TYPE,
-    BOOKING_STATUS
+    BOOKING_STATUS,
+    USER_ROLES
 }
