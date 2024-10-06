@@ -111,6 +111,20 @@ class UserService {
             throw error;
         }
     }
+
+    async getUserEmail(id) {
+        try {
+            const user=await this.#userRepository.get(id);
+            console.log(user);
+            if(!user) {
+                throw new AppError("User Does not exist",StatusCodes.NOT_FOUND);
+            }
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 module.exports=UserService;

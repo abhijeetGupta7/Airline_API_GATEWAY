@@ -61,8 +61,22 @@ async function addRoleToUser(req,res) {
     }   
 }
 
+async function getUserEmailById(req,res) {
+    try {
+        const response=await userService.getUserEmail(req.params.id);
+        SuccessResponse.data=response;
+        SuccessResponse.message="Successfully fetched the User";
+        return res.status(StatusCodes.OK).json(SuccessResponse);
+    } catch (error) {
+        ErrorResponse.message="Something went wrong while getting the User";
+        ErrorResponse.error=error;
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    }
+}
+
 module.exports={
     createUser,
     signIn,
-    addRoleToUser
+    addRoleToUser,
+    getUserEmailById
 }
