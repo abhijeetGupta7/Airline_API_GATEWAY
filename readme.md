@@ -244,7 +244,7 @@ All error responses follow this structure:
   "message": "<description>",
   "data": {},
   "error": {
-    "statusCode": <status>,
+    "statusCode": "code",
     "details": "<error details>"
   }
 }
