@@ -1,13 +1,104 @@
-# API Gateway Flights - API Documentation
+# API Gateway Flights
 
-##### This API Gateway serves as the user management interface for the Flights application. It provides endpoints for user registration, login, role assignment, and user data retrieval. Authentication is handled via JWT tokens to secure the endpoints. Only authorized users with proper roles (like admin) can perform certain sensitive operations such as assigning roles.
+## Project Overview
+
+API Gateway Flights is a Node.js-based gateway for the Flights application, handling user management, authentication, and routing requests to microservices. It provides endpoints for user registration, login, role assignment, and user data retrieval. Authentication is handled via JWT tokens to secure the endpoints. Only authorized users with proper roles (like admin) can perform certain sensitive operations such as assigning roles.
+
+---
+
+## Features
+
+- User registration and authentication (JWT)
+- Role-based access control (customer, admin, flight_company)
+- Proxying requests to Flight and Booking microservices
+- Rate limiting for security
+- Centralized error and success response formats
+
+---
+
+## Tech Stack
+
+- Node.js
+- Express.js
+- Sequelize ORM (MySQL)
+- JWT for authentication
+- bcrypt for password hashing
+
+---
+
+## Setup & Installation
+
+1. **Clone the repository:**
+   ```sh
+   git clone <repo-url>
+   cd API-Gateway_Flights
+   ```
+
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+
+3. **Configure environment variables:**
+   - Copy `.env.example` to `.env` and fill in the required values (see below).
+
+4. **Run database migrations and seeders:**
+   ```sh
+   npx sequelize-cli db:migrate
+   npx sequelize-cli db:seed:all
+   ```
+
+5. **Start the server:**
+   ```sh
+   npm start
+   ```
+
+---
+
+## Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+PORT=3001
+SALT_ROUNDS=8
+JWT_SECRET="your_jwt_secret"
+JWT_EXPIRY="1h"
+FLIGHT_SERVICE_URL="http://localhost:8050"
+BOOKING_SERVICE_URL="http://localhost:8000"
+```
+
+---
+
+## Project Structure
+
+```
+.
+├── src/
+│   ├── config/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── migrations/
+│   ├── models/
+│   ├── repositories/
+│   ├── routes/
+│   ├── seeders/
+│   ├── services/
+│   └── utils/
+├── .env
+├── package.json
+└── readme.md
+```
+
+---
+
+## API Documentation
 
 ## Base URL
 
 ```
 http://localhost:3001/api/v1
 ```
-
 ---
 
 ## Authentication
